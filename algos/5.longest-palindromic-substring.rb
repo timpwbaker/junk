@@ -47,15 +47,17 @@ def longest_palindrome(s)
     #
     # n - 1 to the left of i (excluding i) == n to the right of i (including
     # i)
-    (longest.length/2..i).each do |n|
+    (i).downto(longest.length/2).each do |n|
       if s[i-n..i-1] == s[i+1..i+n].reverse
         palindrome = s[i-n..i+n]
         longest = palindrome if palindrome.length > longest.length
+        break
       end
 
       if s[i-n..i-1] == s[i..i+n-1].reverse
         palindrome = s[i-n..i+n-1]
         longest = palindrome if palindrome.length > longest.length
+        break
       end
     end
   end
@@ -63,6 +65,7 @@ def longest_palindrome(s)
 end
 
 puts longest_palindrome("abb")
+puts longest_palindrome("aaaaaasfsdasdfbdbsdfbb")
 puts longest_palindrome("aaaa")
-puts longest_palindrome("bbaabb")
+puts longest_palindrome("vbbaabb")
 puts longest_palindrome("bbacabb")
