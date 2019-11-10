@@ -52,6 +52,7 @@
 # @param {String} s
 # @param {Integer} num_rows
 # @return {String}
+
 def convert(s, num_rows)
   if s == ""
     return ""
@@ -62,42 +63,37 @@ def convert(s, num_rows)
   # repeat
 
   @row_max_index = num_rows - 1
-  @index = 0
   @chars = s.chars
   @rows = {}
-  @output = ""
 
   (0..@row_max_index).each do |n|
-    @rows[n] = []
+    @rows[n] = ""
   end
 
   while @chars.length > 0
     down
-    @index = @index + 1
-
     accross
   end
 
-  (0..@row_max_index).each do |n|
-    @output = @output + @rows[n].reject{|x| x.nil? || x == ''}.join('')
-  end
-
-  @output
-
+  @rows.values.join("")
 end
 
 def down
   (0..@row_max_index).each do |n|
-    @rows[n][@index] = @chars.shift
+    c = @chars.shift
+    if c
+      @rows[n] << c
+    end
   end
 end
 
 def accross
   (@row_max_index - 1).downto(1).each do |n|
-    @rows[n][@index] = @chars.shift
-    @index = @index + 1
+    c = @chars.shift
+    if c
+      @rows[n] << c
+    end
   end
 end
-
 
 puts convert("PAYPALISHIRING", 4) == "PINALSIGYAHRPI"
