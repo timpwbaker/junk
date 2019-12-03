@@ -1,0 +1,78 @@
+require 'set'
+require 'base64'
+include Base64
+
+def three_sum(nums)
+  # pivot on zero
+  # add positives to negatives
+  # if negative add positives
+  # if positive add negatives
+  return [] if nums.length < 3
+
+  solutions = []
+
+  num_set = Set.new(nums)
+  low_idx = 0
+  high_idx = nums.length - 1
+  pivot = 0
+  while low_idx < high_idx
+    n = nums[low_idx]
+    if n < pivot
+      low_idx += 1
+    else
+      nums[low_idx], nums[high_idx] = nums[high_idx], nums[low_idx]
+      high_idx -= 1
+    end
+  end
+
+  low_idx += 1 if nums[low_idx] < 0
+  negative_end = low_idx
+  high_idx = nums.length - 1
+  low_idx = low_idx
+
+  while low_idx < high_idx
+    n = nums[low_idx]
+    if n == pivot
+      low_idx += 1
+    else
+      nums[low_idx], nums[high_idx] = nums[high_idx], nums[low_idx]
+      high_idx -= 1
+    end
+  end
+
+  low_idx += 1 if nums[low_idx] == 0
+
+  positive_start = low_idx
+  zero_count = positive_start - negative_end
+  solutions << [0,0,0] if zero_count > 2
+
+  positives = nums[positive_start...nums.length]
+  negatives = nums[0...negative_end]
+
+  two_sums = []
+  negatives.each_with_index do |x, ni|
+    positives.each_with_index do |y, pi|
+      two_sums << [((x + y) * -1), [ni, pi + positive_start]]
+    end
+  end
+
+  solution_set = Set.new
+
+  two_sums.each do |pair|
+    required = pair[0]
+    next unless num_set.include?(required)
+
+    indexes = [pair[1][0], pair[1][1]].sort
+    xi = indexes.first
+    yi = indexes.last
+    remaining = Set.new(nums[0...xi].concat(nums[xi + 1...yi]).concat(nums[yi + 1..-1]))
+
+    possible_solution = [nums[xi], nums[yi], pair[0]].sort
+    if remaining.include?(pair[0]) && !solution_set.include?(encode64(possible_solution.pack 'G*'))
+      solutions << [nums[xi], nums[yi], pair[0]].sort if remaining.include?(pair[0])
+      solution_set.add(encode64(possible_solution.pack 'G*'))
+    end
+  end
+
+  solutions
+end
