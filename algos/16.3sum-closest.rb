@@ -1,32 +1,32 @@
-#
-# @lc app=leetcode id=16 lang=ruby
-#
-# [16] 3Sum Closest
-#
-# https://leetcode.com/problems/3sum-closest/description/
-#
-# algorithms
-# Medium (45.71%)
-# Total Accepted:    405.7K
-# Total Submissions: 887.4K
-# Testcase Example:  '[-1,2,1,-4]\n1'
-#
-# Given an array nums of n integers and an integer target, find three integers
-# in nums such that the sum is closest to target. Return the sum of the three
-# integers. You may assume that each input would have exactly one solution.
-# 
-# Example:
-# 
-# 
-# Given array nums = [-1, 2, 1, -4], and target = 1.
-# 
-# The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
-# 
-# 
-#
-# @param {Integer[]} nums
-# @param {Integer} target
-# @return {Integer}
 def three_sum_closest(nums, target)
-    
+  if nums.length < 3
+    return nil
+  end
+
+    sorted = nums.sort
+    i = 0
+    j = 0
+    k = nums.length - 1
+
+    closest = nil
+
+    until i > nums.length
+        j = i + 1
+
+        while j < k
+            sum = nums[i] + nums[j] + nums[k]
+
+            if closest.nil?
+              closest = sum
+            elsif closest.abs > (sum - target).abs
+              closest = sum
+            end
+            j += 1
+        end
+        i += 1
+    end
+
+    closest
 end
+# puts three_sum_closest([-1,2,1,-4], 1)
+puts three_sum_closest([0,0,0], 1)
