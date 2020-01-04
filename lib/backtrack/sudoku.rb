@@ -89,17 +89,21 @@ class Grid
   end
 
   def print
+    lines = []
     line = []
+
     cells.each_with_index do |c, i|
-      if i%9 == 0
-        puts line.to_s
+
+      if i%9 == 0 && i != 0
+        lines << line
         line = []
       end
 
       line << c.value
     end
 
-    puts line.to_s
+    lines << line
+    puts lines.to_s
   end
 
   def full?
